@@ -169,9 +169,9 @@ namespace Lab4_2
             sideB = CalcTriangleSideSine(sideA, oppositeAngleToA, oppositeAngleToB);
             sideC = CalcTriangleSideSine(sideA, oppositeAngleToA, oppositeAngleToC);
         }
-
-        public const string pathToDLL =
-            "D:\\First Grade\\2sem\\LabsC#\\TriangleWork\\Debug\\TriangleWork.dll";
+        //Put DLL in the same folder as .cs file to have such a simple path
+        // Or write a full path to DLL otherwise
+        public const string pathToDLL = "TriangleWork.dll";
 
         //Calculate the angle of a triangle using the cosine theorem
         //The side opposite to the required angle must be passed first
