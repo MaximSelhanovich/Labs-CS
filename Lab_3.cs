@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace Lab_3
 {
@@ -8,10 +9,9 @@ namespace Lab_3
         private double _defaultHealth;
         private double _inFightHealth;
         private double _defaultDamage;
-        private double _inFightDamage;
+        private double _inFightDamage   ;
         private string _colour = "Green";
         private string _name = "Creature " + _totalAmount;
-        private bool _isDefeated = false;
         private static int _totalAmount = 1;
         //TO DO
         //private static int _hybridsAmount;
@@ -21,7 +21,9 @@ namespace Lab_3
             ++_totalAmount;
             _age = age;
             _defaultHealth = health + age / 20;
+            _inFightHealth = _defaultHealth;
             _defaultDamage = damage + age / 30;
+            _inFightDamage = _defaultDamage;
         }
 
         public MagicalСreature(int age, double health, double damage,
@@ -44,10 +46,22 @@ namespace Lab_3
             set => _defaultHealth = value;
         }
 
+        public double InFightHealth
+        {
+            get => _inFightHealth;
+            set => _inFightHealth = value;
+        }
+
         public double Damage
         {
             get => _defaultDamage;
             set => _defaultDamage = value;
+        }
+
+        public double InFightDamage
+        {
+            get => _inFightDamage;
+            set => _inFightDamage = value;
         }
 
         public string Colour
@@ -62,21 +76,75 @@ namespace Lab_3
             set => _name = value;
         }
 
-        public bool IsDefeated
+        public string this[int actionIndex]
         {
-            get => _isDefeated;
-            set => _isDefeated = value;
+            get
+            {
+                switch (actionIndex)
+                {
+                    case 0: return $"{_age}";
+                    case 1: return $"{_defaultHealth}";
+                    case 2: return $"{_defaultDamage}";
+                    case 3: return _colour;
+                    case 4: return _name;
+                    default: return "There is no such field";
+                }
+            }
         }
 
         public void Attack(MagicalСreature isAttacked)
         {
-            
+            if (_name == isAttacked._name)
+            {
+                Console.WriteLine($"{_name} is a little bit dump " +
+                                  $"and tries to attack itself");
+                return;
+            }
+
+            Console.WriteLine($"{_name} attacks {isAttacked._name}");
+
+            if (isAttacked._inFightHealth <= 0)
+            {
+                Console.WriteLine(isAttacked._name +
+                                  " is already defeated, no need to attack");
+                return;
+            }
+
+
             isAttacked._inFightHealth -= _defaultDamage;
             if (isAttacked._inFightHealth <= 0)
             {
-                isAttacked._isDefeated = true;
+                isAttacked._inFightHealth = 0;
                 Console.WriteLine(isAttacked._name + " is defeated.");
             }
+        }
+
+        public void MakeSound(int temp)
+        {
+            Console.Write(_name + " says: ");
+
+            switch (temp)
+            {
+                case 0:
+                    Console.WriteLine("Roooooo-aaaar");
+                    return;
+                case 1:
+                    Console.WriteLine("Aaaaaaaaaaa-rrrrrrrr");
+                    return;
+                case 2:
+                    Console.WriteLine("U u u u u u u u");
+                    return;
+                case 3:
+                    Console.WriteLine("Fksis-fksis-fksis-fksis");
+                    return;
+            }
+        }
+
+        public void PrintInFightInfo()
+        {
+            Console.WriteLine($"{_name} infight characteristics");
+            Console.WriteLine($"HP:\t {_inFightHealth}/{_defaultHealth}");
+            Console.WriteLine($"Damage:\t {_inFightDamage}/{_defaultDamage}\n");
         }
 
         public void Revive()
@@ -84,49 +152,45 @@ namespace Lab_3
             _inFightHealth = _defaultHealth;
             _inFightDamage = _defaultDamage;
         }
+
+        public void Healing()
+        {
+            if (_inFightDamage == 1)
+            {
+                Console.WriteLine($"{_name} attack point is 1, " +
+                                  $"there is no opportunite to heal");
+                return;
+            }
+
+            Console.WriteLine($"{_name} sacrifices 1 attack point " +
+                              $"to get 10 HP ");
+            --_inFightDamage;
+            _inFightHealth += 10;
+        }
     } 
 
     class Lab_3
     {
-        static uint getValidUint()
-        {
-            uint tempUint;
-            bool inputCheck = uint.TryParse(Console.ReadLine(), out tempUint);
-
-            while (!inputCheck)
-            {
-                Console.Clear();
-                Console.WriteLine("Oops, wrong input, try again");
-                inputCheck = uint.TryParse(Console.ReadLine(), out tempUint);
-            }
-            return tempUint;
-        }
-
-        static double getVlidUDouble()
-        {
-            double tempDouble;
-            bool inputCheck = double.TryParse(Console.ReadLine(), out tempDouble);
-
-            while (!inputCheck || tempDouble < 0)
-            {
-                Console.WriteLine("Oops, wrong input, try again");
-                inputCheck = double.TryParse(Console.ReadLine(), out tempDouble);
-                Console.Clear();
-            }
-            return tempDouble;
-        }
-
         static void Main(string[] args)
         {
-            MagicalСreature monster = new MagicalСreature(123, 123, 123);
-            Console.WriteLine(monster.Name);
-            MagicalСreature notMonster = new MagicalСreature(123, 123, 123);
+
+            Random temp = new Random();
+            MagicalСreature monster = new MagicalСreature(123, 90, 10);
+
+            monster.MakeSound(temp.Next(0,4));
+            monster.PrintInFightInfo();
+
+            MagicalСreature notMonster =
+                        new MagicalСreature(100, 80, 11, "Red", "Kitty");
+            notMonster.MakeSound(temp.Next(0, 4));
+            notMonster.PrintInFightInfo();
+
             monster.Attack(notMonster);
-            Console.WriteLine(notMonster.Name);
+            notMonster.PrintInFightInfo();
+            notMonster.Attack(monster);
+            monster.PrintInFightInfo();
 
-
-
-
+ 
         }
     }
 }
