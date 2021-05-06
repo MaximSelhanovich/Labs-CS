@@ -14,8 +14,6 @@ namespace Lab_3
         protected static Random _randomValue = new Random();
         private static int _totalAmount = 0;
 
-
-
         public int Age {
             get
             {
@@ -204,7 +202,7 @@ namespace Lab_3
 
         public virtual object Clone()
         {
-            return new MagicalСreature(this);
+            return (IMagicalCreature) new MagicalСreature(this);
         }
     }
 }

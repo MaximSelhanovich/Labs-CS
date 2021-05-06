@@ -40,6 +40,7 @@ namespace Lab_3
         public static void Fight(List<(IMagicalCreature, IMagicalCreature)> fights)
         {
             byte turn = 1;
+            uint temp;
             while (true)
             {
                 while (fights[0].Item1.InFightHealth > 0 &&
@@ -62,21 +63,52 @@ namespace Lab_3
                 {
                     Console.WriteLine($"{fights[0].Item1.CreatureName} wins!");
 
+                    temp = AfterFightChoise();
                     fights.RemoveAt(0);
 
-                    if (fights.Count == 0) return;
+                    if (fights.Count == 0 || temp == 0) return;
                 }
                 else
                 {
                     Console.WriteLine($"{fights[0].Item2.CreatureName} wins!");
 
+                    temp = AfterFightChoise();
                     fights.RemoveAt(0);
 
-                    if (fights.Count == 0) return;
+                    if (fights.Count == 0 || temp == 0) return;
                 }
             }
         }
 
+        public static uint AfterFightChoise()
+        {
+            Console.WriteLine($"What do you want to do now?");
+            Console.WriteLine("1)Next figth\n2)Repeate this fight afterrwards\n3)End fights");
+            Console.Write("Answer: ");
+            return GetValidUint();
+        }
+
+        public static int AfterFight(List<(IMagicalCreature, IMagicalCreature)> fights)
+        {
+            uint action = AfterFightChoise();
+            switch (action)
+            {
+                case 1:
+                    {
+                        Console.WriteLine("FIGHT!");
+                        return 1;
+                    }
+                case 2:
+                    {
+                        fights.Add((fights[0].Item1.Clone() as IMagicalCreature,
+                                    fights[0].Item2.Clone() as IMagicalCreature));
+                        return 1;
+                    }
+                default:
+                    return 0;
+            }
+        }
+        
         static uint GetValidUint()
         {
             uint tempUint;
@@ -144,9 +176,9 @@ namespace Lab_3
             fights.Add((temp1, temp2));
         }
 
-        public static uint ExitChoise(string message)
+        public static uint ExitChoise()
         {
-            Console.WriteLine($"{message} (1 - yes, anithing - no)");
+            Console.WriteLine($"Do you want to make pair ? (1 - yes, anithing - no)");
             Console.Write("Answer: ");
             return GetValidUint();
         }
@@ -163,12 +195,11 @@ namespace Lab_3
             {
                 MakePairs(listOfFights, numberOfFights);
                 ++numberOfFights;
-                exitChoise = ExitChoise("Do you want to make pair?");
+                exitChoise = ExitChoise();
             }
             while (exitChoise == 1);
 
             Fight(listOfFights);
-
         }
     }
 }

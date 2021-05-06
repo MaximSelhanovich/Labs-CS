@@ -107,7 +107,7 @@ namespace Lab_3
 
         public override object Clone()
         {
-            return new Damager(this);
+            return (IMagicalCreature) new Damager(this);
         }
     }
 }

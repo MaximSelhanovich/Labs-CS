@@ -182,7 +182,7 @@ namespace Lab_3
 
         public override object Clone()
         {
-            return new Tank(this);
+            return (IMagicalCreature) new Tank(this);
         }
     }
 }
