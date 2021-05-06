@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Lab_3
 {
-    class Lab_3
+    class Lab_3_5_6
     {
-        public static void FighterChoise(MagicalСreature activeFighter,
-                                         MagicalСreature passiveFighter)
+        public static void FighterChoise(IMagicalCreature activeFighter,
+                                         IMagicalCreature passiveFighter)
         {
-            Console.WriteLine($"\n{activeFighter[3]} is acting");
+            Console.WriteLine($"\n{activeFighter.CreatureName} is acting");
             Console.WriteLine("Make chooise\n1) Attack\n2) Heal\n3) Print fight info");
             Console.Write("Action: ");
 
@@ -36,36 +37,44 @@ namespace Lab_3
             }
         }
 
-        public static int Fight(MagicalСreature firstFighter,
-                                MagicalСreature secondFighter)
+        public static void Fight(List<(IMagicalCreature, IMagicalCreature)> fights)
         {
             byte turn = 1;
-            while (firstFighter.InFightHealth > 0 &&
-                   secondFighter.InFightHealth > 0)
+            while (true)
             {
-                if (turn == 1)
+                while (fights[0].Item1.InFightHealth > 0 &&
+                       fights[0].Item2.InFightHealth > 0)
                 {
-                    FighterChoise(firstFighter, secondFighter);
-                    turn = 2;
-                }
-                else 
-                {
-                    FighterChoise(secondFighter, firstFighter);
-                    turn = 1;
-                }
-            }
+                    if (turn == 1)
+                    {
 
-            if (turn == 2)
-            {
-                Console.WriteLine($"{firstFighter[3]} wins!");
-                turn = 1;
+                        FighterChoise(fights[0].Item1, fights[0].Item2);
+                        turn = 2;
+                    }
+                    else
+                    {
+                        FighterChoise(fights[0].Item2, fights[0].Item1);
+                        turn = 1;
+                    }
+                }
+
+                if (turn == 2)
+                {
+                    Console.WriteLine($"{fights[0].Item1.CreatureName} wins!");
+
+                    fights.RemoveAt(0);
+
+                    if (fights.Count == 0) return;
+                }
+                else
+                {
+                    Console.WriteLine($"{fights[0].Item2.CreatureName} wins!");
+
+                    fights.RemoveAt(0);
+
+                    if (fights.Count == 0) return;
+                }
             }
-            else
-            {
-                Console.WriteLine($"{secondFighter[3]} wins!");
-                turn = 2;
-            }
-            return turn;
         }
 
         static uint GetValidUint()
@@ -87,25 +96,79 @@ namespace Lab_3
             deadMonster.Revive();
         }
 
+        public static IMagicalCreature ChooseFighter(uint choise) 
+        {
+            switch (choise)
+            {
+                case 1:
+                    {
+                        return new Healer(120, 200, 20, "Ananas", 100, 5);
+                    }
+                case 2:
+                    {
+                        return new Damager(100, 120, 50, "", 6, 1.4);
+                    }
+                case 3:
+                    {
+                        return new Tank(90, 250, 25, "Cool hoel", 8, 200);
+                    }
+                default:
+                    {
+                        return new MagicalСreature(150, 150, 35);                    
+                    }
+    
+            }
+        }
+
+        public static uint ShortChoise(int fighterInFight, int numberOfFights)
+        {
+
+            Console.WriteLine($"Choose {fighterInFight} fighter for the {numberOfFights}");
+            Console.WriteLine("1)Healer\n2)Damager\n3)Tank\nChooise:");
+            return GetValidUint();
+        }
+
+        public static void MakePairs(List<(IMagicalCreature, IMagicalCreature)> fights, int numberOfFights)
+        {
+            int fighterInFight = 1;
+
+            uint choise = ShortChoise(fighterInFight, numberOfFights);
+            IMagicalCreature temp1 = ChooseFighter(choise);
+            ++fighterInFight;
+
+            choise = ShortChoise(fighterInFight, numberOfFights);
+            IMagicalCreature temp2 = ChooseFighter(choise);
+
+            ++numberOfFights;
+
+            fights.Add((temp1, temp2));
+        }
+
+        public static uint ExitChoise(string message)
+        {
+            Console.WriteLine($"{message} (1 - yes, anithing - no)");
+            Console.Write("Answer: ");
+            return GetValidUint();
+        }
+
         static void Main(string[] args)
         {
-            Tank qwe = new Tank(123, 123, 13, "123", 123, 123);
+            List<(IMagicalCreature, IMagicalCreature)> listOfFights =
+                new List<(IMagicalCreature, IMagicalCreature)>();
+            int numberOfFights = 1;
 
-            //MagicalСreature monster = qwe;
-            qwe.MakeSound();
-            qwe.PrintInFightInfo();
+            uint exitChoise;
 
-            MagicalСreature notMonster = new MagicalСreature(100, 80, 11, "Kitty");
+            do
+            {
+                MakePairs(listOfFights, numberOfFights);
+                ++numberOfFights;
+                exitChoise = ExitChoise("Do you want to make pair?");
+            }
+            while (exitChoise == 1);
 
-            notMonster.MakeSound();
-            notMonster.PrintInFightInfo();
+            Fight(listOfFights);
 
-            int winner = Fight(qwe, notMonster);
-
-            if (winner == 1) Revive(notMonster);
-            else Revive(qwe);
-
-            Fight(notMonster, qwe);
         }
     }
 }

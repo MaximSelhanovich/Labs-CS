@@ -1,4 +1,6 @@
-﻿namespace Lab_3
+﻿using System;
+
+namespace Lab_3
 {
     public enum WeaponsName
     {
@@ -53,6 +55,6 @@
         public override string ToString()
         {
             return $"\"{weaponName}\" (Healt: +{BonusWeaponHealth}; Damage: +{BonusWeaponDamage})";
-        }
+        } 
     }
 }

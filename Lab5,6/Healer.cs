@@ -27,10 +27,10 @@ namespace Lab_3
             }
             set
             {
-                int temp = _randomValue.Next(0, InFightNotToSpendManaChance + 1);
+                int temp = _randomValue.Next(0, 101);
                 if (temp > 0 || temp <= InFightNotToSpendManaChance)
                 {
-                    Console.WriteLine($"{creatureName} doesn't spend mana");
+                    Console.WriteLine($"{CreatureName} doesn't spend mana on healing");
                     return;
                 }
 
@@ -67,7 +67,7 @@ namespace Lab_3
 
         public Healer(Healer toCopyFrom)
             : this(toCopyFrom.Age, toCopyFrom.DefaultHealth,
-                    toCopyFrom.DefaultDamage, toCopyFrom.creatureName,
+                    toCopyFrom.DefaultDamage, toCopyFrom.CreatureName,
                     toCopyFrom.DefaultMana, toCopyFrom.DefaultNotToSpendManaChance)
         { }
 
@@ -75,26 +75,26 @@ namespace Lab_3
         {
             if (InFightMana <= 10)
             {
-                Console.WriteLine($"\n{creatureName} mana points is {InFightMana}/10," +
+                Console.WriteLine($"\n{CreatureName} mana points is {InFightMana}/10," +
                                   $" there is no opportunite to heal");
                 return -1;
             }
 
-            Console.WriteLine($"\n{creatureName} use 10 mana points to get 15 HP ");
+            Console.WriteLine($"\n{CreatureName} use 10 mana points to get 15 HP ");
             InFightMana -= 10;
             InFightHealth += 15;
             return 1;
         }
 
-        public override int Attack(MagicalСreature isAttacked)
+        public override int Attack(IMagicalCreature isAttacked)
         {
             if (isAttacked.InFightHealth == 0)
             {
-                Console.WriteLine($"{isAttacked.creatureName} is already defeated, no need to attack");
+                Console.WriteLine($"{isAttacked.CreatureName} is already defeated, no need to attack");
                 return -1;
             }
 
-            Console.WriteLine($"\n{creatureName} attacks {isAttacked.creatureName}\n");
+            Console.WriteLine($"\n{CreatureName} attacks {isAttacked.CreatureName}\n");
 
             isAttacked.InFightHealth -= InFightDamage;
 
@@ -106,7 +106,7 @@ namespace Lab_3
 
             if (isAttacked.InFightHealth <= 0)
             {
-                Console.WriteLine(isAttacked.creatureName + " is defeated.");
+                Console.WriteLine(isAttacked.CreatureName + " is defeated.");
             }
 
             return 1;

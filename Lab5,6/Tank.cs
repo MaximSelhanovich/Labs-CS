@@ -45,7 +45,7 @@ namespace Lab_3
 
                 if (temp > 0 && temp <= InFightChanceToDodge)
                 {
-                    Console.WriteLine($"{creatureName} avoids damage");
+                    Console.WriteLine($"{CreatureName} avoids damage");
                     return;
                 }
 
@@ -65,7 +65,7 @@ namespace Lab_3
 
                 if (temp > 0 && temp <= InFightChanceToDodge)
                 {
-                    Console.WriteLine($"{creatureName} avoids damage");
+                    Console.WriteLine($"{CreatureName} avoids damage");
                     return;
                 }
 
@@ -116,26 +116,26 @@ namespace Lab_3
 
         public Tank(Tank toCopyFrom)
             : this(toCopyFrom.Age, toCopyFrom.DefaultHealth,
-                    toCopyFrom.DefaultDamage, toCopyFrom.creatureName,
+                    toCopyFrom.DefaultDamage, toCopyFrom.CreatureName,
                     toCopyFrom.DefaultChanceToDodge,
                     toCopyFrom.DefaultShieldStrength)
         { }
 
-        public override int Attack(MagicalСreature isAttacked)
+        public override int Attack(IMagicalCreature isAttacked)
         {
             if (isAttacked.InFightHealth == 0)
             {
-                Console.WriteLine($"{isAttacked.creatureName} is already defeated, no need to attack");
+                Console.WriteLine($"{isAttacked.CreatureName} is already defeated, no need to attack");
                 return -1;
             }
 
-            Console.WriteLine($"\n{creatureName} attacks {isAttacked.creatureName}\n");
+            Console.WriteLine($"\n{CreatureName} attacks {isAttacked.CreatureName}\n");
 
             isAttacked.InFightHealth -= InFightDamage;
 
             if (isAttacked.InFightHealth <= 0)
             {
-                Console.WriteLine(isAttacked.creatureName + " is defeated.");
+                Console.WriteLine(isAttacked.CreatureName + " is defeated.");
             }
 
             return 1;
@@ -161,11 +161,11 @@ namespace Lab_3
         {
             if (InFightDamage == 1)
             {
-                Console.WriteLine($"\n{creatureName} attack point is 3, there is no opportunite to heal");
+                Console.WriteLine($"\n{CreatureName} attack point is 3, there is no opportunite to heal");
                 return -1;
             }
 
-            Console.WriteLine($"\n{creatureName} sacrifices 3 attack point to get 10 HP ");
+            Console.WriteLine($"\n{CreatureName} sacrifices 3 attack point to get 10 HP ");
             InFightDamage -= 3;
 
             if (InFightHealth + 10 > DefaultHealth && InFightShieldStrength + 10 < DefaultHealth)

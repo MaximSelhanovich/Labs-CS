@@ -2,7 +2,7 @@
 
 namespace Lab_3
 {
-    public class MagicalСreature : IMagicalCreature, ICloneable
+    public class MagicalСreature : IMagicalCreature
     {
         private int _age;
         private double _defaultHealth;
@@ -12,6 +12,7 @@ namespace Lab_3
         private string _name = "Creature " + _totalAmount;
         private BaseWeapon Weapon { get; set; }
         protected static Random _randomValue = new Random();
+        private static int _totalAmount = 0;
 
 
 
@@ -32,7 +33,7 @@ namespace Lab_3
             {
                 return _defaultHealth;
             }
-            protected set
+            set
             {
                 _defaultHealth = (value <= 0 ? 60 : value) + _age / 20;
             }
@@ -55,7 +56,7 @@ namespace Lab_3
             {
                 return _defaultDamage;
             }
-            protected set
+            set
             {
                 _defaultDamage = (value <= 0 ? 12 : value) + _age / 30;
             } 
@@ -73,19 +74,17 @@ namespace Lab_3
             }
         }
 
-        public string creatureName
+        public string CreatureName
         {
             get
             {
                 return _name;
             }
-            protected set
+            set
             {
-                _name = value == "" ? "Creature " + _totalAmount : value;
+                _name = value == "" ? "Creature " + _totalAmount : value + _totalAmount;
             }
         }
-
-        private static int _totalAmount = 1;
 
         public MagicalСreature(int age, double health, double damage)
         {
@@ -103,12 +102,12 @@ namespace Lab_3
                                double damage, string name)
             : this(age, health, damage)
         {
-            creatureName = name;
+            CreatureName = name;
         }
 
         public MagicalСreature(MagicalСreature toCopyFrom)
             : this(toCopyFrom.Age, toCopyFrom.DefaultHealth,
-                   toCopyFrom.DefaultDamage, toCopyFrom.creatureName)
+                   toCopyFrom.DefaultDamage, toCopyFrom.CreatureName)
         { }
 
         public string this[int actionIndex]
@@ -120,33 +119,33 @@ namespace Lab_3
                     case 0: return $"{Age}";
                     case 1: return $"{DefaultHealth}";
                     case 2: return $"{DefaultDamage}";
-                    case 3: return creatureName;
+                    case 3: return CreatureName;
                     default: return "There is no such field";
                 }
             }
         }
 
-        public virtual int Attack(MagicalСreature isAttacked)
+        public virtual int Attack(IMagicalCreature isAttacked)
         {
-            if (creatureName == isAttacked.creatureName)
+            if (CreatureName == isAttacked.CreatureName)
             {
-                Console.WriteLine($"\n{creatureName} is a little bit dump and tries to attack itself");
+                Console.WriteLine($"\n{CreatureName} is a little bit dump and tries to attack itself");
                 return -1;
             }
 
             if (isAttacked.InFightHealth == 0)
             {
-                Console.WriteLine($"\n{isAttacked.creatureName} is already defeated, no need to attack");
+                Console.WriteLine($"\n{isAttacked.CreatureName} is already defeated, no need to attack");
                 return -1;
             }
 
-            Console.WriteLine($"\n{creatureName} attacks {isAttacked.creatureName}");
+            Console.WriteLine($"\n{CreatureName} attacks {isAttacked.CreatureName}");
 
             isAttacked.InFightHealth -= InFightDamage;
 
             if (isAttacked.InFightHealth <= 0) 
             {
-                Console.WriteLine($"{isAttacked.creatureName} is defeated.");
+                Console.WriteLine($"{isAttacked.CreatureName} is defeated.");
             }
 
             return 1;
@@ -154,7 +153,7 @@ namespace Lab_3
 
         public void MakeSound()
         {
-            Console.Write($"{creatureName} says: ");
+            Console.Write($"{CreatureName} says: ");
 
             switch (_randomValue.Next(0, 4))
             {
@@ -175,7 +174,7 @@ namespace Lab_3
 
         public virtual int PrintInFightInfo()
         {
-            Console.WriteLine($"\n{creatureName} current characteristics");
+            Console.WriteLine($"\n{CreatureName} current characteristics");
             Console.WriteLine($"HP:\t {InFightHealth}/{DefaultHealth}");
             Console.WriteLine($"Damage:\t {InFightDamage}/{DefaultDamage}");
             Console.WriteLine($"Weapon:\t {Weapon}");
@@ -193,11 +192,11 @@ namespace Lab_3
         {
             if (InFightDamage == 1)
             {
-                Console.WriteLine($"\n{creatureName} attack point is 3, there is no opportunite to heal");
+                Console.WriteLine($"\n{CreatureName} attack point is 3, there is no opportunite to heal");
                 return -1;
             }
 
-            Console.WriteLine($"\n{creatureName} sacrifices 3 attack point to get 10 HP ");
+            Console.WriteLine($"\n{CreatureName} sacrifices 3 attack point to get 10 HP ");
             InFightDamage -= 3;
             InFightHealth += 10;
             return 1;

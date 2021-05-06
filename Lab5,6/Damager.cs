@@ -50,7 +50,7 @@ namespace Lab_3
 
         public Damager (Damager toCopyFrom)
             : this (toCopyFrom.Age, toCopyFrom.DefaultHealth,
-                    toCopyFrom.DefaultDamage, toCopyFrom.creatureName,
+                    toCopyFrom.DefaultDamage, toCopyFrom.CreatureName,
                     toCopyFrom.DefaultCriticalHitChance,
                     toCopyFrom.DefaultCriticalDamageMultiplier)
         {}
@@ -61,28 +61,28 @@ namespace Lab_3
 
             if (tryToMakeCrit <= InFightCriticalHitChance)
             {
-                Console.WriteLine($"{creatureName} makes crit");
+                Console.WriteLine($"{CreatureName} makes crit");
                 return InFightCriticalDamageMultiplier;
             }
 
             return 1;
         }
 
-        public override int Attack(MagicalСreature isAttacked)
+        public override int Attack(IMagicalCreature isAttacked)
         {
             if (isAttacked.InFightHealth == 0)
             {
-                Console.WriteLine($"{isAttacked.creatureName} is already defeated, no need to attack");
+                Console.WriteLine($"{isAttacked.CreatureName} is already defeated, no need to attack");
                 return -1;
             }
 
-            Console.WriteLine($"\n{creatureName} attacks {isAttacked.creatureName}\n");
+            Console.WriteLine($"\n{CreatureName} attacks {isAttacked.CreatureName}\n");
 
             isAttacked.InFightHealth -= InFightDamage * MakeCrit();
 
             if (isAttacked.InFightHealth <= 0)
             {
-                Console.WriteLine(isAttacked.creatureName + " is defeated.");
+                Console.WriteLine(isAttacked.CreatureName + " is defeated.");
             }
 
             return 1;
