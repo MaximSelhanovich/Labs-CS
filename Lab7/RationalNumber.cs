@@ -271,13 +271,13 @@ namespace Lab_7
 
                 if (format == "B")
                 {
-                    if (numbers[0][0] != '(' || numbers[0][numbers.Length - 1] != ')')
+                    if (numbers[0][0] != '(' || numbers[1][numbers[1].Length - 1] != ')')
                     {
                         return false;
                     }
 
                     numbers[0] = numbers[0].Remove(0, 1);
-                    numbers[0] = numbers[0].Remove(numbers[0].Length - 1, 1);
+                    numbers[1] = numbers[1].Remove(numbers[1].Length - 1, 1);
                 }
 
                 if (!long.TryParse(numbers[0], out numerator))
@@ -292,6 +292,7 @@ namespace Lab_7
 
                 rational.Numerator = numerator;
                 rational.Denominator = denominator;
+                return true;
             }
 
             if (format == "P")
@@ -332,6 +333,7 @@ namespace Lab_7
                 rational.Denominator = denominator;
 
                 rational += integerPart;
+                return true;
             }
 
             return false;
