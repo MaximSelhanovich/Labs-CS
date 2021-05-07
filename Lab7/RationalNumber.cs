@@ -220,7 +220,121 @@ namespace Lab_7
 
         public static bool TryParse(string toParse, out RationalNumber rational)
         {
+            rational = new RationalNumber();
+            string format;
 
+            if (String.IsNullOrEmpty(toParse))
+            {
+                return false;
+            }
+
+            string[] spletedWords = toParse.Split();
+
+            if (spletedWords.Length > 3)
+            {
+                return false;
+            }
+
+            if (spletedWords[0][0] == '(')
+            {
+                format = "B";
+            }
+            else if (Array.IndexOf(spletedWords, "+") >= 0 && spletedWords.Length == 3)
+            {
+                format = "P";
+            }
+            else if (Char.IsDigit(spletedWords[0][0]))
+            {
+                format = "C";
+            }
+            else 
+            {
+                format = "";
+            }
+
+            if (format == "")
+            {
+                return false;
+            }
+
+            if (format == "C" || format == "B")
+            {
+                string[] numbers = spletedWords[0].Split('/');
+
+                if (numbers.Length != 2)
+                {
+                    return false;
+                }
+
+                long numerator;
+                long denominator;
+
+                if (format == "B")
+                {
+                    if (numbers[0][0] != '(' || numbers[0][numbers.Length - 1] != ')')
+                    {
+                        return false;
+                    }
+
+                    numbers[0] = numbers[0].Remove(0, 1);
+                    numbers[0] = numbers[0].Remove(numbers[0].Length - 1, 1);
+                }
+
+                if (!long.TryParse(numbers[0], out numerator))
+                {
+                    return false;
+                }
+
+                if (!long.TryParse(numbers[0], out denominator))
+                {
+                    return false;
+                }
+
+                rational.Numerator = numerator;
+                rational.Denominator = denominator;
+            }
+
+            if (format == "P")
+            {
+                if (spletedWords[1] != "+" )
+                {
+                    return false;
+                }
+
+                long integerPart;
+
+                if (!long.TryParse(spletedWords[0], out integerPart))
+                {
+                    return false;
+                }
+
+                string[] numbers = spletedWords[2].Split('/');
+
+                if (numbers.Length != 2)
+                {
+                    return false;
+                }
+
+                long numerator;
+                long denominator;
+
+                if (!long.TryParse(numbers[0], out numerator))
+                {
+                    return false;
+                }
+
+                if (!long.TryParse(numbers[0], out denominator))
+                {
+                    return false;
+                }
+
+                rational.Numerator = numerator;
+                rational.Denominator = denominator;
+
+                rational += integerPart;
+            }
+
+            return false;
         }
 
         public override string ToString() { return $"{Numerator}/{Denominator}"; }
@@ -232,8 +346,15 @@ namespace Lab_7
 
         public string ToString(string format, IFormatProvider provider)
         {
-            if (String.IsNullOrEmpty(format)) format = "C";
-            if (provider == null) provider = CultureInfo.CurrentCulture;
+            if (String.IsNullOrEmpty(format))
+            {
+                format = "C";
+            }
+
+            if (provider == null)
+            {
+                provider = CultureInfo.CurrentCulture;
+            }
 
             switch (format.ToUpperInvariant())
             {
@@ -253,7 +374,7 @@ namespace Lab_7
                 //Proper fraction
                 case "P":
                     {
-                        return $"({Numerator / Denominator} + {Numerator % Denominator}/{Denominator})";
+                        return $"{Numerator / Denominator} + {Numerator % Denominator}/{Denominator}";
                     }
                 //Current fraction with brackets
                 case "B":
