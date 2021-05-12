@@ -65,6 +65,7 @@ namespace Lab_7
             Denominator = rational.Denominator;
         }
 
+
         public static RationalNumber operator +(RationalNumber rational)
         {
             return rational;
@@ -74,6 +75,7 @@ namespace Lab_7
         {
             return new RationalNumber(-rational.Numerator, rational.Denominator);
         }
+
 
         public static RationalNumber operator +(RationalNumber rational1, RationalNumber rational2)
         {
@@ -89,16 +91,35 @@ namespace Lab_7
             return sum;
         }
 
+        public static RationalNumber operator +(RationalNumber rational, int integer32)
+        {
+            return new RationalNumber(rational.Numerator + rational.Denominator * integer32,
+                                      rational.Denominator); ;
+        }
+
+
         public static RationalNumber operator -(RationalNumber rational1, RationalNumber rational2)
         {
             return rational1 + (-rational2);
         }
+
+        public static RationalNumber operator -(RationalNumber rational, int integer32)
+        {
+            return rational + (-integer32);
+        }
+
 
         public static RationalNumber operator *(RationalNumber rational1, RationalNumber rational2)
         {
             return new RationalNumber(rational1.Numerator * rational2.Numerator,
                                       rational1.Denominator * rational2.Denominator);
         }
+
+        public static RationalNumber operator *(RationalNumber rational, int integer32)
+        {
+            return new RationalNumber(rational.Numerator * integer32, rational.Denominator);
+        }
+
 
         public static RationalNumber operator /(RationalNumber rational1, RationalNumber rational2)
         {
@@ -107,6 +128,14 @@ namespace Lab_7
             return new RationalNumber(rational1.Numerator * rational2.Denominator,
                                       rational1.Denominator * rational2.Numerator);
         }
+
+        public static RationalNumber operator /(RationalNumber rational, int integer32)
+        {
+            if (integer32 == 0) throw new DivideByZeroException("Division by zero.");
+
+            return new RationalNumber(rational.Numerator, rational.Denominator * integer32);
+        }
+
 
         public override int GetHashCode()
         {
@@ -128,6 +157,7 @@ namespace Lab_7
             return this == temp;
         }
 
+
         public static bool operator ==(RationalNumber rational1, RationalNumber rational2)
         {
             RationalNumber temp1 = rational1;
@@ -139,10 +169,22 @@ namespace Lab_7
             return temp1.Numerator == temp2.Numerator && temp1.Denominator == temp2.Denominator;
         }
 
+        public static bool operator ==(RationalNumber rational, int integer32)
+        {
+            return rational.Numerator == rational.Denominator * integer32;
+        }
+
+
         public static bool operator !=(RationalNumber rational1, RationalNumber rational2)
         {
             return !(rational1 == rational2);
         }
+
+        public static bool operator !=(RationalNumber rational, int integer32)
+        {
+            return !(rational == integer32);
+        }
+
 
         public static bool operator <(RationalNumber rational1, RationalNumber rational2)
         {
@@ -159,20 +201,49 @@ namespace Lab_7
             return false;
         }
 
+        public static bool operator <(RationalNumber rational, int integer32)
+        {
+            if (rational.Numerator < 0 && integer32 >= 0) return true;
+            if (rational.Numerator >= 0 && integer32 < 0) return false;
+
+            if (rational.Numerator < rational.Denominator * integer32) return true;
+
+            return false;
+        }
+
+
         public static bool operator >(RationalNumber rational1, RationalNumber rational2)
         {
             return rational2 < rational1 && rational1 != rational2;
         }
+
+        public static bool operator >(RationalNumber rational, int integer32)
+        {
+            return integer32 < rational && rational != integer32;
+        }
+
 
         public static bool operator <=(RationalNumber rational1, RationalNumber rational2)
         {
             return rational1 < rational2 || rational1 == rational2;
         }
 
+        public static bool operator <=(RationalNumber rational, int integer32)
+        {
+            return rational < integer32 || rational == integer32;
+        }
+
+
         public static bool operator >=(RationalNumber rational1, RationalNumber rational2)
         {
             return rational1 > rational2 || rational1 == rational2;
         }
+
+        public static bool operator >=(RationalNumber rational, int integer32)
+        {
+            return rational > integer32 || rational == integer32;
+        }
+
 
         public static explicit operator float(RationalNumber rational)
         {

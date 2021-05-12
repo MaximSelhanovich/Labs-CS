@@ -10,6 +10,11 @@ namespace Lab_7
     {
         static void Main(string[] args)
         {
+            RationalNumber qwe = new RationalNumber(4, 2);
+            int asd = 2;
+
+            Console.WriteLine(qwe == asd);
+
             Console.WriteLine("Enter fractions in such formats (E - to exit)");
             Console.WriteLine("1) a/b\n2) (a/b)\n3) a + b/c");
 
@@ -57,6 +62,7 @@ namespace Lab_7
             Console.WriteLine($"Total sum(double): {sumThemAll} = {(double)sumThemAll}");
 
             Console.WriteLine($"Total sum(long): {sumThemAll} = {(long)sumThemAll}");
+
         }
     }
 }
