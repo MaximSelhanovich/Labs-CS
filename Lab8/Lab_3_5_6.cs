@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Lab_3
 {
     class Lab_3_5_6
-    { 
+    {
         static void RunFights(Func<ConsoleKeyInfo, IMagicalCreature, IMagicalCreature, int> keyHandler,
                                  IMagicalCreature activeFighter, IMagicalCreature passiveFighter)
         {
@@ -12,9 +12,8 @@ namespace Lab_3
             Console.WriteLine("Make chooise\n1) Attack\n2) Heal\n3) Print fight info\n4)Make sound");
             Console.Write("Action: ");
 
-            ConsoleKeyInfo key = Console.ReadKey();
-
-            while (keyHandler?.Invoke(key, activeFighter, passiveFighter) != 1) key = Console.ReadKey();
+                while (keyHandler?.Invoke(Console.ReadKey(), activeFighter, passiveFighter) != 1 &&
+                       activeFighter.InFightHealth > 0 && passiveFighter.InFightHealth > 0) ;
         }
 
         public static void Fight(List<(IMagicalCreature, IMagicalCreature)> fights,
@@ -24,12 +23,11 @@ namespace Lab_3
             uint temp;
             while (true)
             {
-                while (fights[0].Item1.InFightHealth > 0 &&
-                       fights[0].Item2.InFightHealth > 0)
+                while (fights[0].Item1.InFightHealth > 0 && fights[0].Item2.InFightHealth > 0)
                 {
                     if (turn == 1)
                     {
-                        RunFights(keyHandler ,fights[0].Item1, fights[0].Item2);
+                        RunFights(keyHandler, fights[0].Item1, fights[0].Item2);
                         turn = 2;
                     }
                     else
@@ -48,7 +46,7 @@ namespace Lab_3
                     Console.WriteLine($"{fights[0].Item2.CreatureName} wins!");
                 }
 
-                temp = AfterFightChoise();
+                temp = AfterFight(fights);
                 fights.RemoveAt(0);
 
                 if (fights.Count == 0 || temp == 0) return;
@@ -63,7 +61,7 @@ namespace Lab_3
             return GetValidUint();
         }
 
-        public static int AfterFight(List<(IMagicalCreature, IMagicalCreature)> fights)
+        public static uint AfterFight(List<(IMagicalCreature, IMagicalCreature)> fights)
         {
             uint action = AfterFightChoise();
             switch (action)
@@ -83,7 +81,7 @@ namespace Lab_3
                     return 0;
             }
         }
-        
+
         static uint GetValidUint()
         {
             uint tempUint;
@@ -103,7 +101,7 @@ namespace Lab_3
             deadMonster.Revive();
         }
 
-        public static IMagicalCreature ChooseFighter(uint choise) 
+        public static IMagicalCreature ChooseFighter(uint choise)
         {
             switch (choise)
             {
@@ -121,7 +119,7 @@ namespace Lab_3
                     }
                 default:
                     {
-                        return new MagicalСreature(150, 150, 35);                    
+                        return new MagicalСreature(150, 150, 35);
                     }
             }
         }
@@ -158,9 +156,9 @@ namespace Lab_3
 
         static void Main(string[] args)
         {
-            Func<ConsoleKeyInfo, IMagicalCreature, IMagicalCreature, int> 
+            Func<ConsoleKeyInfo, IMagicalCreature, IMagicalCreature, int>
             keyHandler = (key, activeFighter, passiveFighter) =>
-            {
+           {
                 if (key.Key == ConsoleKey.D4 || key.Key == ConsoleKey.NumPad4) return activeFighter.MakeSound();
                 return -1;
             };
@@ -186,10 +184,12 @@ namespace Lab_3
 
             keyHandler += (key, activeFighter, passiveFighter) =>
             {
-                if (key.Key != ConsoleKey.D4 && key.Key != ConsoleKey.NumPad4 &&
-                      key.Key != ConsoleKey.D2 && key.Key != ConsoleKey.NumPad2 &&
-                      key.Key != ConsoleKey.D3 && key.Key != ConsoleKey.NumPad3 &&
-                      key.Key != ConsoleKey.D1 && key.Key != ConsoleKey.NumPad1)
+                if (key.Key == ConsoleKey.D4 || key.Key == ConsoleKey.NumPad4 ||
+                    key.Key == ConsoleKey.D2 || key.Key == ConsoleKey.NumPad2 ||
+                    key.Key == ConsoleKey.D3 || key.Key == ConsoleKey.NumPad3 ||
+                    key.Key == ConsoleKey.D1 || key.Key == ConsoleKey.NumPad1)
+                    return 1;
+
                     Console.WriteLine("\nThere is no such an opportunity");
 
                 return -1;

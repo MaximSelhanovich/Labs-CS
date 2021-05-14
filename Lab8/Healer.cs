@@ -111,7 +111,7 @@ namespace Lab_3
 
         public override int Healing()
         {
-            if (InFightMana <= 10)
+            if (InFightMana < 10)
             {
                 Console.WriteLine($"\n{CreatureName} mana points is {InFightMana}/10," +
                                   $" there is no opportunite to heal");
@@ -128,7 +128,7 @@ namespace Lab_3
         {
             if (isAttacked.InFightHealth == 0)
             {
-                Console.WriteLine($"{isAttacked.CreatureName} is already defeated, no need to attack");
+                Console.WriteLine($"\n{isAttacked.CreatureName} is already defeated, no need to attack");
                 return -1;
             }
 
