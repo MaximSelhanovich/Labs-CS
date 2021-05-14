@@ -154,10 +154,11 @@ namespace Lab_3
             return GetValidUint();
         }
 
+        public static event Action<List<(IMagicalCreature, IMagicalCreature)>, int> CreatingPairs;
+
         static void Main(string[] args)
         {
             Func<ConsoleKeyInfo, IMagicalCreature, IMagicalCreature, int> 
-
             keyHandler = (key, activeFighter, passiveFighter) =>
             {
                 if (key.Key == ConsoleKey.D4 || key.Key == ConsoleKey.NumPad4) return activeFighter.MakeSound();
@@ -194,6 +195,8 @@ namespace Lab_3
                 return -1;
             };
 
+            CreatingPairs = MakePairs;
+
             List<(IMagicalCreature, IMagicalCreature)> listOfFights =
                 new List<(IMagicalCreature, IMagicalCreature)>();
             int numberOfFights = 1;
@@ -202,7 +205,7 @@ namespace Lab_3
 
             do
             {
-                MakePairs(listOfFights, numberOfFights);
+                CreatingPairs(listOfFights, numberOfFights);
                 ++numberOfFights;
                 exitChoise = ExitChoise();
             }
